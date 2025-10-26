@@ -1,0 +1,45 @@
+using System;
+
+class R2_T02_Slozenost_03_Odsecanje_Eratosten_Ver_000
+{
+    const int MOD = 1000000;                // Ako zbir ima vise od 6 cifara ispisati samo ostatak pri deljenju sa 1000000
+    static void Main()
+    {
+        int a = int.Parse(Console.ReadLine());  // Interval [a, b]
+        int b = int.Parse(Console.ReadLine());  // Interval [a, b]
+        int s = 0;  // Zbir svih prostih brojeva u intervalu [a, b]
+        int p = 0;  // Broj svih prostih brojeva u intervalu [a, b]
+        Prosti_brojevi_u_intervalu_A_B_Ver_00(a, b, ref p, ref s);
+        Console.WriteLine(p + " " + s);
+    }
+
+    static void Prosti_brojevi_u_intervalu_A_B_Ver_00(int a, int b, ref int p, ref int s)
+    {
+        s = 0;  // Zbir svih prostih brojeva u intervalu [a, b]
+        p = 0;  // Broj svih prostih brojeva u intervalu [a, b]
+        for (int x = a; x <= b; x++)
+            if (Prost_Ver_04_Brzi(x)) { p++; s = s + x; s = s % MOD; }
+    }
+    static bool Prost_Ver_04_Brzi(int n)          // O(Sqrt(N)) 
+    {
+        if (n == 1 || (n % 2 == 0 && n > 2) || (n % 3 == 0 && n > 3)) return false;
+        for (int k = 1; (6 * k - 1) * (6 * k - 1) <= n; k++)
+            if (n % (6 * k - 1) == 0 || n % (6 * k + 1) == 0) return false;
+        return true;
+    }
+}
+
+// n = 1000000007;              // n = 10^9 + 7
+// n = 1111111111111111111;     // n > 10^19
+
+
+
+// Kurs: R2_T02_Sleozenost_03_Odsecanje_Eratosten: https://petlja.org/sr-Latn-RS/kurs/17838/2/3504
+// Kurs: R3_T01_Algebarski_algoritmi_05_Eratosten: https://petlja.org/sr-Latn-RS/kurs/17918/1/5325
+// Zbirka stara: https://petlja.org/sr-Latn-RS/biblioteka/r/problemi/Zbirka-stara/eratostenovo_sito
+// Zbirka 2: https://petlja.org/sr-Latn-RS/biblioteka/r/Zbirka2/eratostenovo_sito
+// Zbirka 3: https://petlja.org/sr-Latn-RS/biblioteka/r/Zbirka3/eratostenovo_sito
+// Vikipedija GIF: https://upload.wikimedia.org/wikipedia/commons/b/b9/Sieve_of_Eratosthenes_animation.gif
+// Vikipedija: https://sr.wikipedia.org/wiki/%D0%95%D1%80%D0%B0%D1%82%D0%BE%D1%81%D1%82%D0%B5%D0%BD%D0%BE%D0%B2%D0%BE_%D1%81%D0%B8%D1%82%D0%BE
+// https://arena.petlja.org/sr-Latn-RS/competition/r3-t01-05-faktorizacija-bilijar#tab_133477
+// https://arena.petlja.org/sr-Latn-RS/competition/r3-t01-05-faktorizacija#tab_133477 
