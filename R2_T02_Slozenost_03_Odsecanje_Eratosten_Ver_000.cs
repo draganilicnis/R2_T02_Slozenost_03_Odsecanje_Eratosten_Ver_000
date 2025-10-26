@@ -1,29 +1,56 @@
 using System;
+// using System.Diagnostics;
 
 class R2_T02_Slozenost_03_Odsecanje_Eratosten_Ver_000
 {
-    const int MOD = 1000000;                // Ako zbir ima vise od 6 cifara ispisati samo ostatak pri deljenju sa 1000000
+    const long MOD = 1000000;                // Ako zbir ima vise od 6 cifara ispisati samo ostatak pri deljenju sa 1000000
     static void Main()
     {
-        int a = int.Parse(Console.ReadLine());  // Interval [a, b]
-        int b = int.Parse(Console.ReadLine());  // Interval [a, b]
-        int s = 0;  // Zbir svih prostih brojeva u intervalu [a, b]
-        int p = 0;  // Broj svih prostih brojeva u intervalu [a, b]
-        Prosti_brojevi_u_intervalu_A_B_Ver_00(a, b, ref p, ref s);
-        Console.WriteLine(p + " " + s);
+        long a = long.Parse(Console.ReadLine());  // interval [a, b] 1 <= a <= b <= 10^7
+        long b = long.Parse(Console.ReadLine());  // interval [a, b] 1 <= a <= b <= 10^7
+        long s = 0;  // Zbir svih prostih brojeva u intervalu [a, b]
+        long p = 0;  // Broj svih prostih brojeva u intervalu [a, b]
+
+        // Stopwatch t = new Stopwatch();
+        // t.Start();
+        // Prosti_brojevi_u_longervalu_A_B_Ver_00(a, b, ref p, ref s); Console.WriteLine(p + " " + s);
+        // t.Stop(); Console.WriteLine(t.Elapsed); t.Reset();
+        // t.Start();
+        Prosti_brojevi_u_longervalu_A_B_Ver_01(a, b, ref p, ref s); Console.WriteLine(p + " " + s);
+        // t.Stop(); Console.WriteLine(t.Elapsed); t.Reset();
     }
 
-    static void Prosti_brojevi_u_intervalu_A_B_Ver_00(int a, int b, ref int p, ref int s)
+    static bool[] Eratosten_Niz_Napuni(long n)         // ProstiBrojeviDo N
     {
-        s = 0;  // Zbir svih prostih brojeva u intervalu [a, b]
-        p = 0;  // Broj svih prostih brojeva u intervalu [a, b]
-        for (int x = a; x <= b; x++)
+        bool[] Prost_niz = new bool[n + 1];
+        for (long i = 0; i <= n; i++) Prost_niz[i] = true;
+
+        Prost_niz[0] = false; Prost_niz[1] = false;
+        for (long b = 2; b * b <= n; b++)
+            if (Prost_niz[b])
+                for (long k = b * b; k <= n; k = k + b) Prost_niz[k] = false;
+        return Prost_niz;
+    }
+    static void Prosti_brojevi_u_longervalu_A_B_Ver_01(long a, long b, ref long p, ref long s)
+    {
+        s = 0;  // Zbir svih prostih brojeva u longervalu [a, b]
+        p = 0;  // Broj svih prostih brojeva u longervalu [a, b]
+        bool[] Prost_niz = Eratosten_Niz_Napuni(b);
+        for (long x = a; x <= b; x++)
+            if (Prost_niz[x]) { p++; s = s + x; s = s % MOD; }
+    }
+
+    static void Prosti_brojevi_u_longervalu_A_B_Ver_00(long a, long b, ref long p, ref long s)
+    {
+        s = 0;  // Zbir svih prostih brojeva u longervalu [a, b]
+        p = 0;  // Broj svih prostih brojeva u longervalu [a, b]
+        for (long x = a; x <= b; x++)
             if (Prost_Ver_04_Brzi(x)) { p++; s = s + x; s = s % MOD; }
     }
-    static bool Prost_Ver_04_Brzi(int n)          // O(Sqrt(N)) 
+    static bool Prost_Ver_04_Brzi(long n)          // O(Sqrt(N)) 
     {
         if (n == 1 || (n % 2 == 0 && n > 2) || (n % 3 == 0 && n > 3)) return false;
-        for (int k = 1; (6 * k - 1) * (6 * k - 1) <= n; k++)
+        for (long k = 1; (6 * k - 1) * (6 * k - 1) <= n; k++)
             if (n % (6 * k - 1) == 0 || n % (6 * k + 1) == 0) return false;
         return true;
     }
