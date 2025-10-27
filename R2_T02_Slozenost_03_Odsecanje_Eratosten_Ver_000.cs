@@ -6,17 +6,17 @@ class R2_T02_Slozenost_03_Odsecanje_Eratosten_Ver_000
     const long MOD = 1000000;                // Ako zbir ima vise od 6 cifara ispisati samo ostatak pri deljenju sa 1000000
     static void Main()
     {
-        long a = long.Parse(Console.ReadLine());  // interval [a, b] 1 <= a <= b <= 10^7
-        long b = long.Parse(Console.ReadLine());  // interval [a, b] 1 <= a <= b <= 10^7
+        long a = long.Parse(Console.ReadLine());  // interval [a, b] 1 <= a <= b <= 10^7  --> 1
+        long b = long.Parse(Console.ReadLine());  // interval [a, b] 1 <= a <= b <= 10^7  --> 1000000007 nekoliko sekundi
         long s = 0;  // Zbir svih prostih brojeva u intervalu [a, b]
         long p = 0;  // Broj svih prostih brojeva u intervalu [a, b]
 
         // Stopwatch t = new Stopwatch();
         // t.Start();
-        // Prosti_brojevi_u_longervalu_A_B_Ver_00(a, b, ref p, ref s); Console.WriteLine(p + " " + s);
+        // Prosti_brojevi_u_longervalu_A_B_Ver_00(a, b, ref p, ref s); Console.WriteLine(p + " " + s);  // O(N*Sqrt(N))
         // t.Stop(); Console.WriteLine(t.Elapsed); t.Reset();
         // t.Start();
-        Prosti_brojevi_u_longervalu_A_B_Ver_01(a, b, ref p, ref s); Console.WriteLine(p + " " + s);
+        Prosti_brojevi_u_intervalu_A_B_Ver_01(a, b, ref p, ref s); Console.WriteLine(p + " " + s);  // O(N * Log Log (N) = N * (1/2+1/3+1/5+1/7+1/11+...)
         // t.Stop(); Console.WriteLine(t.Elapsed); t.Reset();
     }
 
@@ -31,11 +31,13 @@ class R2_T02_Slozenost_03_Odsecanje_Eratosten_Ver_000
                 for (long k = b * b; k <= n; k = k + b) Prost_niz[k] = false;
         return Prost_niz;
     }
-    static void Prosti_brojevi_u_longervalu_A_B_Ver_01(long a, long b, ref long p, ref long s)
+    static void Prosti_brojevi_u_intervalu_A_B_Ver_01(long a, long b, ref long p, ref long s)
     {
         s = 0;  // Zbir svih prostih brojeva u longervalu [a, b]
         p = 0;  // Broj svih prostih brojeva u longervalu [a, b]
+        // Stopwatch t = new Stopwatch(); t.Start();
         bool[] Prost_niz = Eratosten_Niz_Napuni(b);
+        // t.Stop(); Console.WriteLine(t.Elapsed); t.Reset();      // oko 12 sec za b = 1000000007 (vrednost a nema uticaja moze biti 1 ili 1000000007)
         for (long x = a; x <= b; x++)
             if (Prost_niz[x]) { p++; s = s + x; s = s % MOD; }
     }
