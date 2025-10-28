@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;       // Zbog Liste
 // using System.Diagnostics;
 
 class R3_T01_05_Eratosten_Modifikovan_Ver_000
 {
-    static long[] Eratosten_Niz_Napuni_INT_Ver_01(long n)   // Prosti brojevi do N. Za N, odnosno broj B = 0,1,2,3,4,5,6,7,8,9,10:
+    static long[] Eratosten_Niz_Napuni_INT_Ver_01(long n)   // Prosti brojevi do N. Za N, odnosno broj B = 0,1,2,3,4,5,6,7,8,9,10:  // O(log log n)
     {                                                       // MODIFIKOVANO Eratostenovo sito              0,1,2,3,2,5,2,7,2,3,2    // Pamcenje najmanjeg delioca svakog broja
         long[] Prost_niz_INT = new long[n + 1];
         for (long B = 0; B <= n; B++) Prost_niz_INT[B] = B; // Nakon ove linije koda niz ce biti:          0,1,2,3,4,5,6,7,8,9,10
@@ -14,8 +15,8 @@ class R3_T01_05_Eratosten_Modifikovan_Ver_000
                         Prost_niz_INT[k] = B;               // Prost_niz_INT[4] dobija vrednost 2 => Prost_niz_INT[4]=2, u sledecem prolazu Prost_niz_INT[6] takodje dobija 2...
         return Prost_niz_INT;                               // U ovoj liniji koda niz je:                  0,1,2,3,2,5,2,7,2,3,2    // Pamcenje najmanjeg delioca svakog broja
     }
-    static bool[] Eratosten_Niz_Napuni_BOOL_Ver_00(long n)  // Prosti brojevi do N. Za N, odnosno broj B = 0,1,2,3,4,5,6,7,8,9,10:
-    {                                                       // Eratostenovo sito                           F,F,T,T,F,T,F,T,F,F,F 
+    static bool[] Eratosten_Niz_Napuni_BOOL_Ver_00(long n)  // Prosti brojevi do N. Za N, odnosno broj B = 0,1,2,3,4,5,6,7,8,9,10:  // O(log log n)
+    {                                                       // Eratostenovo sito                           F,F,T,T,F,T,F,T,F,F,F    
         bool[] Prost_niz_BOOL = new bool[n + 1];
         for (long B = 0; B <= n; B++) Prost_niz_BOOL[B] = true;     // Moze da se dodatno malo ubrza, tako sto ce se izbaciti ova for petlja
         Prost_niz_BOOL[0] = false; Prost_niz_BOOL[1] = false;       // u tom slucaju inicijalne vrednosti su FALSE, pa treba okrenuti TF i da se zove Slozen_niz_BOOL
@@ -25,13 +26,43 @@ class R3_T01_05_Eratosten_Modifikovan_Ver_000
                     Prost_niz_BOOL[k] = false;              // Prost_niz_INT[4] dobija vrednost FALSE => Prost_niz_INT[4]=F, u sledecem prolazu Prost_niz_INT[6] takodje dobija F...
         return Prost_niz_BOOL;                              // U ovoj liniji koda niz je:                  F,F,T,T,F,T,F,T,F,F,F
     }
+
+    static List<long> Eratosten_Prosti_cinioci_broja_A_List_Napuni(long A, long[] Prost_niz_INT)
+    {
+        List<long> Eratosten_Prosti_cinioci_broja_A_List = new List<long>();
+        while (A > 1)
+        {
+            long Prost_cinilac_sledeci = Prost_niz_INT[A];
+            Eratosten_Prosti_cinioci_broja_A_List.Add(Prost_cinilac_sledeci);
+            A = A / Prost_cinilac_sledeci;      // A = A / Prost_niz_INT[A];
+        }
+        return Eratosten_Prosti_cinioci_broja_A_List;
+    }
+
+    static void Eratosten_Proba_za_neki_konkretan_broj_A_koji_je_manji_od_N(long A, long[] Prost_niz_INT)
+    {
+        List<long> Eratosten_Prosti_cinioci_broja_A_List = Eratosten_Prosti_cinioci_broja_A_List_Napuni(A, Prost_niz_INT);
+        for (int i = 0; i < Eratosten_Prosti_cinioci_broja_A_List.Count; i++) Console.Write(Eratosten_Prosti_cinioci_broja_A_List[i] + " ");
+        Console.WriteLine();
+    }
+
+    static void Eratosten_Proba_za_sve_brojeve_koji_su_manji_od_N(long[] Prost_niz_INT)
+    {
+        for (long b = 0; b < Prost_niz_INT.Length; b++)
+            Eratosten_Proba_za_neki_konkretan_broj_A_koji_je_manji_od_N(b, Prost_niz_INT);
+    }
     static void Main()
     {
+        long N = 20;
+        long[] Prost_niz_INT = Eratosten_Niz_Napuni_INT_Ver_01(N);
+        for (long B = 0; B <= N; B++) Console.Write(Prost_niz_INT[B] + " ");
+        Console.WriteLine();
+
+        Eratosten_Proba_za_sve_brojeve_koji_su_manji_od_N(Prost_niz_INT);
+
+
         // Zad_00_Eratosten();
         // Zad_01_Zbir_prostih_prost();
-        long n = 10;
-        long[] Prost_niz_INT = Eratosten_Niz_Napuni_INT_Ver_01(n);
-        for (long b = 1; b <= n; b++) Console.Write(Prost_niz_INT[b] + " ");
     }
     static void Zad_00_Eratosten()
     {
