@@ -25,12 +25,48 @@ class R3_T01_05_Eratosten_Modifikovan_Ver_001
                     Prost_niz_BOOL[k] = false;              // Prost_niz_INT[4] dobija vrednost FALSE => Prost_niz_INT[4]=F, u sledecem prolazu Prost_niz_INT[6] takodje dobija F...
         return Prost_niz_BOOL;                              // U ovoj liniji koda niz je:                  F,F,T,T,F,T,F,T,F,F,F
     }
+    static int[] Eratosten_Niz_Napuni_BOOL_Ver_01(long n)   // Prosti brojevi do N. Za N, odnosno broj B = 0,1,2,3,4,5,6,7,8,9,10:  // O(log log n)
+    {                                                       // Eratostenovo sito                           F,F,T,T,F,T,F,T,F,F,F    
+        int[] Prost_niz_BOOL = new int[n + 1];              // Umesto BOOOL (TRUE ili FALSE) bice INT (1 ili 0) >=  1=TRUE=Prost i 0=FALSE=Slozen (nije prost) 
+        for (long B = 0; B <= n; B++) Prost_niz_BOOL[B] = 1;    // Moze da se dodatno malo ubrza, tako sto ce se izbaciti ova for petlja
+        Prost_niz_BOOL[0] = 0; Prost_niz_BOOL[1] = 0;       // u tom slucaju inicijalne vrednosti su FALSE, pa treba okrenuti TF i da se zove Slozen_niz_BOOL
+        for (long B = 2; B * B <= n; B++)                   // Vrednost B ide od 2 do SQRT(n) => ako je n=10 b ce ici od 2 do 3, jer je vec 4*4 > 10
+            if (Prost_niz_BOOL[B] == 1)                     // Kada je B=2, Prost_niz_BOOL[2]=TRUE, za B=3 isto, ali vec za B=4 bice FALSE, jer ce Prost_niz_BOOL[4]=FALSE
+                for (long k = B * B; k <= n; k = k + B)     // Kada je B=2, k krece od 2*2, tj od 4 i 
+                    Prost_niz_BOOL[k] = 0;                  // Prost_niz_INT[4] dobija vrednost FALSE => Prost_niz_INT[4]=F, u sledecem prolazu Prost_niz_INT[6] takodje dobija F...
+        return Prost_niz_BOOL;                              // U ovoj liniji koda niz je:                  0,0,1,1,0,1,0,1,0,0,0
+    }
+    static int[] Eratosten_Niz_Prebroj_BOOL_Ver_01(long n)  // Prosti brojevi do N. Za N, odnosno broj B = 0,1,2,3,4,5,6,7,8,9,10:  // O(log log n)
+    {                                                       // Eratostenovo sito                           F,F,T,T,F,T,F,T,F,F,F    
+        int[] Prost_niz_BOOL = Eratosten_Niz_Napuni_BOOL_Ver_01(n);  // Umesto BOOOL (TRUE ili FALSE) bice INT (1 ili 0) >=  1=TRUE=Prost i 0=FALSE=Slozen (nije prost) 
+        for (long B = 1; B <= n; B++)
+            Prost_niz_BOOL[B] = Prost_niz_BOOL[B - 1] + Prost_niz_BOOL[B];  
+        return Prost_niz_BOOL;                              // U ovoj liniji koda niz je:                  0,0,1,2,2,3,3,4,4,4,4
+    }
     static void Main()
     {
-        R3_T01_05_Zad_02_Broj_prostih_u_intervalima();
+        // R3_T01_05_Zad_02_Broj_prostih_u_intervalima_Ver_00();
+        R3_T01_05_Zad_02_Broj_prostih_u_intervalima_Ver_01();
     }
-    static void R3_T01_05_Zad_02_Broj_prostih_u_intervalima()
+    static void R3_T01_05_Zad_02_Broj_prostih_u_intervalima_Ver_01()
     {
+        // Console.WriteLine("Ver 01:");
+        long n = long.Parse(Console.ReadLine());                        // n: Broj parova a, b => 1 <= n <= 10^4 
+        long Eratosten_Niz_LEN = 1000 * 1000;                           // 1 <= a < b <= 10^6
+        int[] Prost_niz_BOOL = Eratosten_Niz_Prebroj_BOOL_Ver_01(Eratosten_Niz_LEN);
+
+        for (int i = 0; i < n; i++)
+        {
+            string[] sAB = Console.ReadLine().Split();
+            int a = int.Parse(sAB[0]);      // 1 <= a < b <= 10^6
+            int b = int.Parse(sAB[1]);      // 1 <= a < b <= 10^6
+            int broj_Prostih_u_intervalu_AB = Prost_niz_BOOL[b] - Prost_niz_BOOL[a - 1];
+            Console.WriteLine(broj_Prostih_u_intervalu_AB);
+        }
+    }
+    static void R3_T01_05_Zad_02_Broj_prostih_u_intervalima_Ver_00()
+    {
+        // Console.WriteLine("Ver 00:");
         long n = long.Parse(Console.ReadLine());                        // n: Broj parova a, b => 1 <= n <= 10^4 
         long Eratosten_Niz_LEN = 1000 * 1000;                           // 1 <= a < b <= 10^6
         bool[] Prost_niz_BOOL = Eratosten_Niz_Napuni_BOOL_Ver_00(Eratosten_Niz_LEN);    
