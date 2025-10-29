@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;       // Zbog Liste
+// using System.Collections.Generic;       // Zbog Liste
 
 class R3_T01_05_Eratosten_Modifikovan_Ver_001
 {
